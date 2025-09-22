@@ -1,0 +1,73 @@
+class InventarioTienda:
+    def __init__(self, nombre):
+        self.nombre = nombre
+        self.productos = []
+
+    def agregar(self, nombre, precio, cantidad):
+        if precio <= 0 or cantidad <= 0:
+            print("Error: precio y cantidad deben ser positivos.")
+            return
+        for p in self.productos:
+            if p["nombre"] == nombre:
+                p["cantidad"] += cantidad
+                p["precio"] = precio
+                print("Producto actualizado.")
+                return
+        self.productos.append({"nombre": nombre, "precio": precio, "cantidad": cantidad})
+        print("Producto agregado.")
+
+    def vender(self, nombre, cantidad):
+        for p in self.productos:
+            if p["nombre"] == nombre:
+                if cantidad <= 0:
+                    print("Cantidad inválida.")
+                elif p["cantidad"] >= cantidad:
+                    p["cantidad"] -= cantidad
+                    print("Venta realizada.")
+                else:
+                    print("Stock insuficiente.")
+                return
+        print("Producto no encontrado.")
+
+    def mostrar(self):
+        if not self.productos:
+            print("Inventario vacío.")
+        for p in self.productos:
+            print(f"{p['nombre']} - ${p['precio']} - Cantidad: {p['cantidad']}")
+
+    def mas_caro(self):
+        if not self.productos:
+            print("Inventario vacío.")
+            return
+        p = max(self.productos, key=lambda x: x["precio"])
+        print(f"Más caro: {p['nombre']} - ${p['precio']}")
+
+
+tienda = InventarioTienda(input("Nombre de la tienda: "))
+
+while True:
+    print("\n1. Agregar\n2. Vender\n3. Ver\n4. Más caro\n5. Salir")
+    op = input("Opción: ")
+    if op == "1":
+        n = input("Nombre: ")
+        try:
+            pr = float(input("Precio: "))
+            c = int(input("Cantidad: "))
+            tienda.agregar(n, pr, c)
+        except:
+            print("Datos inválidos.")
+    elif op == "2":
+        n = input("Nombre: ")
+        try:
+            c = int(input("Cantidad: "))
+            tienda.vender(n, c)
+        except:
+            print("Cantidad inválida.")
+    elif op == "3":
+        tienda.mostrar()
+    elif op == "4":
+        tienda.mas_caro()
+    elif op == "5":
+        break
+    else:
+        print("Opción inválida.")
